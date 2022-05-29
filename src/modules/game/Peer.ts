@@ -69,6 +69,11 @@ class Peer {
         this.game.update('players');
         break;
       }
+      case 'setBomb': {
+        this.game.myPlayer.bombUserId = action.bombUserId;
+        this.game.update('setBomb');
+        break;
+      }
       default:
         break;
     }

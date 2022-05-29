@@ -12,7 +12,10 @@ const AttackState = ({ player }: { player: Player }) => {
     const id = setInterval(() => {
       if (player?.attackState === 'default' || timer < 0) {
         clearInterval(id);
-        controller.resetAttackState();
+
+        if (player.isMe) {
+          controller.resetAttackState();
+        }
         return;
       }
       setTimer(timer);

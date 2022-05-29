@@ -35,6 +35,11 @@ type ResetAttackStateAction = {
   type: 'resetAttackState';
 };
 
+type SetBombAction = {
+  type: 'setBomb';
+  bombUserId: string;
+};
+
 export type GameAction =
   | GameReadyAction
   | TypeWordAction
@@ -42,7 +47,8 @@ export type GameAction =
   | ScorePlayerAction
   | EmitWordAction
   | SkillAction
-  | ResetAttackStateAction;
+  | ResetAttackStateAction
+  | SetBombAction;
 
 const gameActionCreator = {
   gameReady: (): GameReadyAction => ({ type: 'gameReady' }),
@@ -64,6 +70,10 @@ const gameActionCreator = {
   }),
   resetAttackState: (): ResetAttackStateAction => ({
     type: 'resetAttackState',
+  }),
+  setBomb: (bombUserId: string): SetBombAction => ({
+    type: 'setBomb',
+    bombUserId,
   }),
 };
 

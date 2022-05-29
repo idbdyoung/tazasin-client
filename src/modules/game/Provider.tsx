@@ -16,6 +16,7 @@ type GameProps = {
   controller: GameController;
   correctWord: MissionWord | null;
   emittedWord: MissionWord | null;
+  bombUserId: string | null;
 };
 
 const GameContext = createContext<GameProps>({} as GameProps);
@@ -31,9 +32,11 @@ const useProvideGame = () => {
     correctWord,
     controller,
     emittedWord,
+    bombUserId,
   } = useGameElements(enteredGame);
 
   return {
+    game: enteredGame,
     gameState,
     gameRoomInfo,
     gamePhase,
@@ -42,7 +45,7 @@ const useProvideGame = () => {
     controller,
     correctWord,
     emittedWord,
-    game: enteredGame,
+    bombUserId,
   };
 };
 

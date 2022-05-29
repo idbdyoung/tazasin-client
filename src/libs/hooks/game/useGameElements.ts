@@ -10,6 +10,7 @@ const useGameElements = (game?: Game) => {
   const [players, setPlayers] = useState<Player[]>([]);
   const [correctWord, setCorrectWord] = useState<MissionWord | null>(null);
   const [emittedWord, setEmittedWord] = useState<MissionWord | null>(null);
+  const [bombUserId, setBombUserId] = useState<string | null>(null);
 
   const handleUpdateGameState = (gameState: GameState) => setGameState(gameState);
 
@@ -20,9 +21,9 @@ const useGameElements = (game?: Game) => {
 
   const handleUpdateCorrectWord = (correctWord: MissionWord) => setCorrectWord(correctWord);
 
-  const handleUpdateEmittedWord = (word: MissionWord) => {
-    setEmittedWord(word);
-  };
+  const handleUpdateEmittedWord = (word: MissionWord) => setEmittedWord(word);
+
+  const handleUpdateSetBomb = (bombUserId: string) => setBombUserId(bombUserId);
 
   const controller: GameController = {
     leaveGame: () => game?.leaveGame(),
@@ -41,6 +42,7 @@ const useGameElements = (game?: Game) => {
     doSkill: (skillType: SkillEffect, user: Player, target: Player) =>
       game?.doSkill(skillType, user, target),
     resetAttackState: () => game?.resetAttackState(),
+    bombSetted: () => setBombUserId(null),
   };
 
   useEffect(() => {
@@ -52,12 +54,14 @@ const useGameElements = (game?: Game) => {
     game.addEventListener('players', handleUpdatePlayers);
     game.addEventListener('correctWord', handleUpdateCorrectWord);
     game.addEventListener('emitWord', handleUpdateEmittedWord);
+    game.addEventListener('setBomb', handleUpdateSetBomb);
 
     return () => {
       game.removeEventListenr('gameState', handleUpdateGameState);
       game.removeEventListenr('players', handleUpdatePlayers);
       game.removeEventListenr('correctWord', handleUpdateCorrectWord);
       game.removeEventListenr('emitWord', handleUpdateEmittedWord);
+      game.removeEventListenr('setBomb', handleUpdateSetBomb);
     };
   }, [game]);
 
@@ -70,6 +74,7 @@ const useGameElements = (game?: Game) => {
     correctWord,
     emittedWord,
     controller,
+    bombUserId,
   };
 };
 

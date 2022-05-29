@@ -6,7 +6,6 @@ import RoomState from './RoomState';
 
 const GameHeader = () => {
   const { players, controller } = useGame();
-  console.log(players);
 
   const handleStartGame = () => {
     if (!players[0].isHost) return;

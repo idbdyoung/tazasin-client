@@ -24,7 +24,8 @@ const Word = ({ word }: WordProps) => {
 
   const scorePlayer = () => {
     if (!wordRef.current || !word.player?.id) return;
-    document.getElementById('mission-board')?.removeChild(wordRef.current);
+    console.log(word.bombUserId);
+    wordRef.current.style.display = 'none';
     controller.scorePlayer(word.player.id, word.item);
   };
 
@@ -44,7 +45,10 @@ const Word = ({ word }: WordProps) => {
       time -= 1;
     }, 100);
 
-    return () => clearInterval(id);
+    return () => {
+      setScored(false);
+      clearInterval(id);
+    };
   }, [word.player]);
 
   return (
@@ -94,9 +98,12 @@ const Word = ({ word }: WordProps) => {
           <div className="absolute w-full h-[5px] bg-black top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
         )}
         {myPlayer?.attackState === 'reverse' ? word.text.split('').reverse().join('') : word.text}
-        {word.item && (
+        {(word.item || word.bombUserId) && (
           <div className="absolute text-yellow-100 text-[1px] -top-1 -left-1 rotate-45">
-            <Star />
+            <Star
+              fill={word.bombUserId === myPlayer?.id ? '#ff2d2d' : '#f8ffa4'}
+              className="w-2 h-2"
+            />
           </div>
         )}
       </div>

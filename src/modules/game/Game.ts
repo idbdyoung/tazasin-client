@@ -9,6 +9,7 @@ interface GameEventMap {
   players: Player[];
   correctWord: MissionWord;
   emitWord: MissionWord;
+  setBomb: string;
 }
 
 class Game {
@@ -89,15 +90,22 @@ class Game {
     this.update('emitWord');
   }
 
-  doSkill(skillType: SkillEffect, user: Player, target: Player) {
+  doSkill(skillType: SkillEffect, skillUser: Player, skillTarget: Player) {
     if (skillType === 'default') {
       this.myPlayer.attackState = 'default';
       this.broadCast(gameActionCreator.resetAttackState());
+    } else if (skillType === 'bomb') {
+      if (+skillUser.id === this.gameRoom.hostId) {
+        this.myPlayer.bombUserId = skillUser.id;
+        this.update('setBomb');
+      } else {
+        this.direct(String(this.gameRoom.hostId), gameActionCreator.setBomb(skillUser.id));
+      }
     } else {
-      const peer = this.peers.get(target.id);
+      const peer = this.peers.get(skillTarget.id);
       if (!peer) return;
       peer.player.attackState = skillType;
-      this.broadCast(gameActionCreator.skill(skillType, user, target));
+      this.broadCast(gameActionCreator.skill(skillType, skillUser, skillTarget));
     }
     this.myPlayer.itemState[skillType] -= 1;
     this.update('players');
@@ -175,6 +183,10 @@ class Game {
       }
       case 'emitWord': {
         this.gameEventMap.get(type)?.trigger(this.emittedWord);
+        break;
+      }
+      case 'setBomb': {
+        this.gameEventMap.get(type)?.trigger(this.myPlayer.bombUserId);
         break;
       }
       default:

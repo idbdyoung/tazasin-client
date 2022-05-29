@@ -54,6 +54,7 @@ type GameController = {
   emitWord: (emittedWord: MissionWord) => void;
   doSkill: (skillType: SkillEffect, user: Player, target: Player) => void;
   resetAttackState: () => void;
+  bombSetted: () => void;
 };
 
-type SkillEffect = 'default' | 'reverse' | 'light' | 'rotate' | 'blind';
+type SkillEffect = 'default' | 'reverse' | 'light' | 'rotate' | 'blind' | 'bomb';

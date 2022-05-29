@@ -4,6 +4,7 @@ export type MissionWord = {
   text: string;
   player: Player | null;
   item: SkillEffect | null;
+  bombUserId: string | null;
 };
 
 class Player {
@@ -22,9 +23,11 @@ class Player {
     light: 1,
     rotate: 1,
     reverse: 1,
+    bomb: 1,
     default: 1,
   };
   score: number = 0;
+  bombUserId: string | null = null;
   readonly MIN_DECIBELS = -45;
   private audioDetectedEvent = new CustomEvent<boolean>();
 

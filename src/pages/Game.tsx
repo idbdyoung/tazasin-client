@@ -5,6 +5,7 @@ import GameHeader from '../components/game/inGame/GameHeader';
 import PlayerBoard from '../components/game/inGame/PlayerBoard';
 import UserProfile from '../components/game/inGame/UserProfile';
 import MissionBoard from '../components/game/inGame/MissionBoard';
+import SkillBox from '../components/game/inGame/SkillBox';
 
 import type { MissionWord } from '../modules/game/Player';
 
@@ -12,8 +13,17 @@ const missions = ['안녕하세요', '반갑습니다', '일어나세요', '뭐�
 const items: SkillEffect[] = ['blind', 'light', 'default', 'reverse', 'rotate'];
 
 const Game: React.FC = () => {
-  const { gamePhase, gameState, correctWord, emittedWord, players, myPlayer, controller, game } =
-    useGame();
+  const {
+    gamePhase,
+    gameState,
+    correctWord,
+    emittedWord,
+    players,
+    myPlayer,
+    controller,
+    game,
+    bombUserId,
+  } = useGame();
   const missionIndex = useRef(0);
   const tmpNum = useRef(0);
   const [currentWords, setCurrentWords] = useState<MissionWord[]>([]);
@@ -57,12 +67,18 @@ const Game: React.FC = () => {
 
     if (myPlayer?.isHost) {
       const id = setInterval(() => {
-        const word = {
+        const word: MissionWord = {
           text: missions[missionIndex.current] + tmpNum.current,
           player: null,
-          item: Math.random() > 0.8 ? items[Math.floor(Math.random() * 4)] : null,
+          item:
+            bombUserId !== null || Math.random() > 0.8
+              ? items[Math.floor(Math.random() * 4)]
+              : null,
+          bombUserId,
         };
+
         controller.emitWord(word);
+        if (bombUserId !== null) controller.bombSetted();
 
         if (missionIndex.current === missions.length - 1) {
           missionIndex.current = 0;
@@ -74,7 +90,7 @@ const Game: React.FC = () => {
 
       return () => clearInterval(id);
     }
-  }, [gamePhase]);
+  }, [gamePhase, myPlayer?.isHost, bombUserId]);
 
   useEffect(() => {
     if (!correctWord) return;
@@ -107,7 +123,14 @@ const Game: React.FC = () => {
               <PlayerBoard key={player.id} player={player} currentWords={currentWords} />
             ))}
           </div>
-          {gameState === 'ingame' && <MissionBoard currentWords={currentWords} />}
+          {gameState === 'ingame' && (
+            <div className="flex flex-col w-full h-full space-y-2">
+              {gameState === 'ingame' && gamePhase === 'mission' && myPlayer && (
+                <SkillBox player={myPlayer} />
+              )}
+              <MissionBoard currentWords={currentWords} />
+            </div>
+          )}
           {gameState === 'waiting' &&
             new Array(4 - players.length).fill('').map((_, i) => (
               <div

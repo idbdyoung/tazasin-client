@@ -6,7 +6,6 @@ import AttackState from './AttackState';
 import AudioVisual from './AudioVisual';
 import Mark from './Mark';
 import Score from './Score';
-import SkillBox from './SkillBox/index';
 
 interface UserProfileProps {
   player?: Player;
@@ -32,7 +31,6 @@ const UserProfile: React.FC<UserProfileProps> = ({ player }) => {
           <Score score={player?.score ?? 0} color={player?.color ?? 'white'} />
         )}
         {gameState === 'ingame' && !!attacking && <AttackState player={player!} />}
-        {gameState === 'ingame' && <SkillBox currentPlayer={player!} />}
         {gameState === 'waiting' && (
           <>
             {player?.isMe && (
