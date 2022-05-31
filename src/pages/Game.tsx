@@ -7,6 +7,8 @@ import UserProfile from '../components/game/inGame/UserProfile';
 import MissionBoard from '../components/game/inGame/MissionBoard';
 import SkillBox from '../components/game/inGame/SkillBox';
 
+import { adjectives, nouns } from '../libs/missionWords';
+
 import type { MissionWord } from '../modules/game/Player';
 
 const missions = ['안녕하세요', '반갑습니다', '일어나세요', '뭐하십니까?', '큰일났습니다.'];
@@ -24,10 +26,19 @@ const Game: React.FC = () => {
     game,
     bombUserId,
   } = useGame();
-  console.log(players);
-  const missionIndex = useRef(0);
-  const tmpNum = useRef(0);
+  const usedNounIndexs = useRef<{ [key in number]: boolean }>({});
   const [currentWords, setCurrentWords] = useState<MissionWord[]>([]);
+
+  const getNoun = (): string => {
+    const randomNum = Math.floor(Math.random() * nouns.length);
+
+    if (usedNounIndexs.current[randomNum]) {
+      return getNoun();
+    } else {
+      usedNounIndexs.current[randomNum] = true;
+      return nouns[randomNum];
+    }
+  };
 
   const handleRefresh = (e: BeforeUnloadEvent) => {
     e.preventDefault();
@@ -69,7 +80,7 @@ const Game: React.FC = () => {
     if (myPlayer?.isHost) {
       const id = setInterval(() => {
         const word: MissionWord = {
-          text: missions[missionIndex.current] + tmpNum.current,
+          text: adjectives[Math.floor(Math.random() * adjectives.length)] + ' ' + getNoun(),
           player: null,
           item:
             bombUserId !== null || Math.random() > 0.8
@@ -80,13 +91,6 @@ const Game: React.FC = () => {
         controller.emitWord(word);
 
         if (bombUserId !== null) controller.bombSetted();
-
-        if (missionIndex.current === missions.length - 1) {
-          missionIndex.current = 0;
-        } else {
-          missionIndex.current++;
-        }
-        tmpNum.current++;
       }, 4000);
 
       return () => clearInterval(id);
