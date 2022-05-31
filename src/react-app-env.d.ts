@@ -55,6 +55,8 @@ type GameController = {
   doSkill: (skillType: SkillEffect, user: Player, target: Player) => void;
   resetAttackState: () => void;
   bombSetted: () => void;
+  bombPlayer: (bombState: boolean) => void;
+  endGame: (winnerId: string) => void;
 };
 
 type SkillEffect = 'default' | 'reverse' | 'light' | 'rotate' | 'blind' | 'bomb';

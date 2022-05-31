@@ -74,6 +74,26 @@ class Peer {
         this.game.update('setBomb');
         break;
       }
+      case 'bombState': {
+        const player = this.game.peers.get(action.bombedPlayerId)?.player;
+        if (!player) return;
+        player.bombed = action.bombState;
+
+        if (player.score < 2) {
+          player.score = 0;
+        } else {
+          player.score -= 2;
+        }
+        this.game.update('players');
+        break;
+      }
+      case 'endGame': {
+        const peer = this.game.peers.get(action.winnerId);
+        if (!peer) return;
+        this.game.gameWinner = peer.player;
+        this.game.update('gameWinner');
+        break;
+      }
       default:
         break;
     }

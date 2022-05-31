@@ -24,6 +24,7 @@ const Game: React.FC = () => {
     game,
     bombUserId,
   } = useGame();
+  console.log(players);
   const missionIndex = useRef(0);
   const tmpNum = useRef(0);
   const [currentWords, setCurrentWords] = useState<MissionWord[]>([]);
@@ -76,8 +77,8 @@ const Game: React.FC = () => {
               : null,
           bombUserId,
         };
-
         controller.emitWord(word);
+
         if (bombUserId !== null) controller.bombSetted();
 
         if (missionIndex.current === missions.length - 1) {

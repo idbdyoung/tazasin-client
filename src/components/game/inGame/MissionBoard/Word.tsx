@@ -15,6 +15,7 @@ const Word = ({ word }: WordProps) => {
   const { controller, myPlayer } = useGame();
   const wordRef = useRef<HTMLDivElement>(null);
   const [getScored, setScored] = useState(false);
+  const [bombed, setBombed] = useState(false);
   const [animate, setAnimate] = useCycle({
     top: `${Math.floor(Math.random() * 100)}%`,
     left: `${Math.floor(Math.random() * 90)}%`,
@@ -24,9 +25,13 @@ const Word = ({ word }: WordProps) => {
 
   const scorePlayer = () => {
     if (!wordRef.current || !word.player?.id) return;
-    console.log(word.bombUserId);
+
+    if (word.bombUserId) {
+      controller.bombPlayer(true);
+    } else {
+      controller.scorePlayer(word.player.id, word.item);
+    }
     wordRef.current.style.display = 'none';
-    controller.scorePlayer(word.player.id, word.item);
   };
 
   useEffect(() => {
@@ -38,7 +43,11 @@ const Word = ({ word }: WordProps) => {
       setProgress(time);
 
       if (time === 0) {
-        setScored(true);
+        if (word.bombUserId) {
+          setBombed(true);
+        } else {
+          setScored(true);
+        }
         clearInterval(id);
         return;
       }
@@ -50,6 +59,16 @@ const Word = ({ word }: WordProps) => {
       clearInterval(id);
     };
   }, [word.player]);
+
+  useEffect(() => {
+    if (!bombed) return;
+
+    const id = setTimeout(() => {
+      controller.bombPlayer(false);
+    }, 1000);
+
+    return () => clearTimeout(id);
+  }, [bombed]);
 
   return (
     <motion.div
@@ -73,6 +92,19 @@ const Word = ({ word }: WordProps) => {
               <img src={`/assets/${word.item}.png`} className="w-4 h-4" />
             </div>
           )}
+        </motion.div>
+      )}
+      {bombed && (
+        <motion.div
+          className="flex flex-col justify-center items-center text-red-500"
+          animate={{ scale: [0, 2, 0.5, 1] }}
+          transition={{ times: [0, 0.1, 0.9, 1] }}
+          onAnimationComplete={() => scorePlayer()}
+        >
+          <div className="flex justify-center items-center w-7 h-7 p-1 bg-white rounded-full">
+            <img src={'/assets/explode.png'} className="w-4 h-4" />
+          </div>
+          <div className="text-3xl">Bomb!</div>
         </motion.div>
       )}
       {word.player && (

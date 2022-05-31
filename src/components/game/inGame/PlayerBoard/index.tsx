@@ -19,6 +19,7 @@ const PlayerBoard = ({ player, currentWords }: TypingBoardProps) => {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.currentTarget;
+    if (/[0-9]/.test(value)) return;
     setTyping(value);
     controller.typeWord(value);
   };

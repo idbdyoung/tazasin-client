@@ -9,6 +9,7 @@ import { useModal } from '../modules/Modal';
 import Button from '../components/buttons/Default';
 import CreateGame from '../components/game/CreateGame';
 import GameRoom from '../components/game/GameRoom';
+import EnterPrivateGame from '../components/game/EnterPrivateGame';
 
 interface createdGameResultesult {
   ok: boolean;
@@ -29,6 +30,11 @@ const Waiting: React.FC = () => {
     modal.open(<CreateGame createGame={createGame} loading={loading} />);
   };
 
+  const openEnterGamePopup = () => {
+    if (!user) return;
+    modal.open(<EnterPrivateGame />);
+  };
+
   useEffect(() => {
     if (!user) {
       navigate('/');
@@ -43,21 +49,18 @@ const Waiting: React.FC = () => {
   }, [createGameResult]);
 
   return (
-    <div className="flex flex-col w-full h-full">
+    <div className="flex flex-col items-center w-full h-full">
       <div className="flex items-center justify-between w-full h-20 px-5">
         <div className="flex flex-col text-sm h-11 text-primary-gray">
           <div className="mr-4">{`대기중인 게임: ${gameList?.length ?? 0}`}</div>
         </div>
         <div className="flex flex-row">
-          <Button className={'mr-3'} text={'코드로 참여'} onClick={() => {}} />
+          <Button className={'mr-3'} text={'코드로 참여'} onClick={openEnterGamePopup} />
           <Button text={'방만들기'} onClick={openCreateGamePopup} />
         </div>
       </div>
-      <div className="flex flex-row overflow-y-hidden space-x-3 flex-1 box-border">
-        <div className="flex overflow-scroll px-5 py-3 flex-1 bg-yellow-50">
-          <div className="w-full h-[1500px] bg-indigo-300"></div>
-        </div>
-        <div className="overflow-scroll px-5 py-3 w-3/4">
+      <div className="flex flex-row w-1/2 min-w-[700px] overflow-y-hidden space-x-3 flex-1 box-border">
+        <div className="overflow-scroll px-5 py-3 w-full">
           {gameList &&
             gameList.map(gameRoom => <GameRoom key={gameRoom.gameId} gameRoom={gameRoom} />)}
         </div>

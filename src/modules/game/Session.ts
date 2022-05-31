@@ -40,9 +40,9 @@ class Session {
         if (!this.game) return;
         if (action.nextHostId) {
           if (+action.nextHostId === this.user.id) {
-            alert('새로운 방장으로 임명되었습니다.');
             this.game.myPlayer.isHost = true;
             this.game.myPlayer.isReady = true;
+            alert('새로운 방장으로 임명되었습니다.');
           } else {
             const peer = this.game.peers.get(action.nextHostId);
             if (peer) {
@@ -75,6 +75,10 @@ class Session {
       }
       case 'gameStarted': {
         this.handleGameStarted();
+        break;
+      }
+      case 'gameReseted': {
+        this.handleGameReseted();
         break;
       }
     }
@@ -115,6 +119,10 @@ class Session {
   }
 
   private handleGameStarted() {
+    this.game?.update('gameState');
+  }
+
+  private handleGameReseted() {
     this.game?.update('gameState');
   }
 

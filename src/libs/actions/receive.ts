@@ -38,10 +38,15 @@ type GameStartedAction = {
   onGame: true;
 };
 
+type GameResetedAction = {
+  type: 'gameReseted';
+};
+
 export type ReceiveAction =
   | EnteredAction
   | LeavedAction
   | CalledAction
   | AnsweredAction
   | CandidatedAction
-  | GameStartedAction;
+  | GameStartedAction
+  | GameResetedAction;

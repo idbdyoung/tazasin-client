@@ -4,20 +4,21 @@ import Word from './Word';
 
 import type { MissionWord } from '../../../../modules/game/Player';
 import CureVisual from './CureVisual';
+import EndingBoard from '../PlayerBoard/EndingBoard';
 
 interface MissionBoardProps {
   currentWords: MissionWord[];
 }
 
 const MissionBoard = ({ currentWords }: MissionBoardProps) => {
-  const { gamePhase, gameState, players, myPlayer } = useGame();
+  const { gamePhase, myPlayer, gameWinner } = useGame();
 
   return (
     <div className="relative h-full w-full bg-zinc-900 rounded-md">
       {gamePhase === 'ready' ? (
         <ReadyBoard />
-      ) : gamePhase === 'end' ? (
-        <div>게임끝</div>
+      ) : gamePhase === 'end' && gameWinner ? (
+        <EndingBoard winner={gameWinner} />
       ) : (
         <div id="mission-board" className="relative w-full h-full">
           <CureVisual />

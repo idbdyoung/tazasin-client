@@ -28,6 +28,7 @@ class Player {
   };
   score: number = 0;
   bombUserId: string | null = null;
+  bombed: boolean = false;
   readonly MIN_DECIBELS = -45;
   private audioDetectedEvent = new CustomEvent<boolean>();
 

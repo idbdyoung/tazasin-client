@@ -10,6 +10,8 @@ interface GameEventMap {
   correctWord: MissionWord;
   emitWord: MissionWord;
   setBomb: string;
+  bombState: boolean;
+  gameWinner: Player;
 }
 
 class Game {
@@ -21,6 +23,7 @@ class Game {
   gameEventMap = new Map<keyof GameEventMap, CustomEvent<any>>();
   correctWord: MissionWord | null = null;
   emittedWord: MissionWord | null = null;
+  gameWinner: Player | null = null;
 
   constructor(
     socket: WebSocket,
@@ -58,6 +61,11 @@ class Game {
     this.broadCast(gameActionCreator.gameReady());
     this.myPlayer.isReady = !this.myPlayer.isReady;
     this.update('players');
+  }
+
+  endGame(winnerId: string) {
+    this.broadCast(gameActionCreator.endGame(winnerId));
+    this.socket.send(JSON.stringify(actionCreator.endGame(this.gameRoom.gameId)));
   }
 
   typeWord(typed: string) {
@@ -114,6 +122,18 @@ class Game {
   resetAttackState() {
     this.myPlayer.attackState = 'default';
     this.broadCast(gameActionCreator.resetAttackState());
+    this.update('players');
+  }
+
+  bombPlayer(bombed: boolean) {
+    this.broadCast(gameActionCreator.bombState(bombed, this.myPlayer.id));
+    this.myPlayer.bombed = bombed;
+
+    if (this.myPlayer.score < 2) {
+      this.myPlayer.score = 0;
+    } else {
+      this.myPlayer.score -= 2;
+    }
     this.update('players');
   }
 
@@ -187,6 +207,14 @@ class Game {
       }
       case 'setBomb': {
         this.gameEventMap.get(type)?.trigger(this.myPlayer.bombUserId);
+        break;
+      }
+      case 'bombState': {
+        this.gameEventMap.get(type)?.trigger(this.myPlayer.bombed);
+        break;
+      }
+      case 'gameWinner': {
+        this.gameEventMap.get(type)?.trigger(this.gameWinner);
         break;
       }
       default:

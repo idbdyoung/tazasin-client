@@ -11,6 +11,8 @@ const useGameElements = (game?: Game) => {
   const [correctWord, setCorrectWord] = useState<MissionWord | null>(null);
   const [emittedWord, setEmittedWord] = useState<MissionWord | null>(null);
   const [bombUserId, setBombUserId] = useState<string | null>(null);
+  const [bombState, setBombState] = useState(false);
+  const [gameWinner, setGameWinner] = useState<Player | null>(null);
 
   const handleUpdateGameState = (gameState: GameState) => setGameState(gameState);
 
@@ -25,6 +27,13 @@ const useGameElements = (game?: Game) => {
 
   const handleUpdateSetBomb = (bombUserId: string) => setBombUserId(bombUserId);
 
+  const handleUpdateBombState = (bombState: boolean) => setBombState(bombState);
+
+  const handleUpdateGameWinner = (gameWinner: Player) => {
+    setGameWinner(gameWinner);
+    setGamePhase('end');
+  };
+
   const controller: GameController = {
     leaveGame: () => game?.leaveGame(),
     startGame: () => game?.startGame(),
@@ -36,13 +45,18 @@ const useGameElements = (game?: Game) => {
       setCorrectWord(missionWord);
     },
     scorePlayer: (playerId: string, item: SkillEffect | null) => game?.scorePlayer(playerId, item),
-    emitWord: (word: MissionWord) => {
-      game?.emitWord(word);
-    },
+    emitWord: (word: MissionWord) => game?.emitWord(word),
     doSkill: (skillType: SkillEffect, user: Player, target: Player) =>
       game?.doSkill(skillType, user, target),
     resetAttackState: () => game?.resetAttackState(),
     bombSetted: () => setBombUserId(null),
+    bombPlayer: (bombState: boolean) => game?.bombPlayer(bombState),
+    endGame: (winnerId: string) => {
+      if (!myPlayer) return;
+      setGameWinner(myPlayer);
+      game?.endGame(winnerId);
+      setGamePhase('end');
+    },
   };
 
   useEffect(() => {
@@ -55,6 +69,8 @@ const useGameElements = (game?: Game) => {
     game.addEventListener('correctWord', handleUpdateCorrectWord);
     game.addEventListener('emitWord', handleUpdateEmittedWord);
     game.addEventListener('setBomb', handleUpdateSetBomb);
+    game.addEventListener('bombState', handleUpdateBombState);
+    game.addEventListener('gameWinner', handleUpdateGameWinner);
 
     return () => {
       game.removeEventListenr('gameState', handleUpdateGameState);
@@ -62,6 +78,8 @@ const useGameElements = (game?: Game) => {
       game.removeEventListenr('correctWord', handleUpdateCorrectWord);
       game.removeEventListenr('emitWord', handleUpdateEmittedWord);
       game.removeEventListenr('setBomb', handleUpdateSetBomb);
+      game.removeEventListenr('bombState', handleUpdateBombState);
+      game.removeEventListenr('gameWinner', handleUpdateGameWinner);
     };
   }, [game]);
 
@@ -75,6 +93,8 @@ const useGameElements = (game?: Game) => {
     emittedWord,
     controller,
     bombUserId,
+    bombState,
+    gameWinner,
   };
 };
 

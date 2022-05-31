@@ -12,8 +12,14 @@ interface UserProfileProps {
 }
 
 const UserProfile: React.FC<UserProfileProps> = ({ player }) => {
-  const { gameState, gamePhase } = useGame();
+  const { gameState, gamePhase, controller } = useGame();
   const [attacking, setAttacking] = useState<string | boolean>();
+
+  useEffect(() => {
+    if (player?.score === 1) {
+      controller.endGame(player.id);
+    }
+  }, [player?.score]);
 
   useEffect(() => {
     if (player?.attackState === 'default') {

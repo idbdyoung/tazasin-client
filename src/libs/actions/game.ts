@@ -40,6 +40,17 @@ type SetBombAction = {
   bombUserId: string;
 };
 
+type BombStateAction = {
+  type: 'bombState';
+  bombState: boolean;
+  bombedPlayerId: string;
+};
+
+type EndGameAction = {
+  type: 'endGame';
+  winnerId: string;
+};
+
 export type GameAction =
   | GameReadyAction
   | TypeWordAction
@@ -48,7 +59,9 @@ export type GameAction =
   | EmitWordAction
   | SkillAction
   | ResetAttackStateAction
-  | SetBombAction;
+  | SetBombAction
+  | BombStateAction
+  | EndGameAction;
 
 const gameActionCreator = {
   gameReady: (): GameReadyAction => ({ type: 'gameReady' }),
@@ -74,6 +87,15 @@ const gameActionCreator = {
   setBomb: (bombUserId: string): SetBombAction => ({
     type: 'setBomb',
     bombUserId,
+  }),
+  bombState: (bombState: boolean, bombedPlayerId: string): BombStateAction => ({
+    type: 'bombState',
+    bombState,
+    bombedPlayerId,
+  }),
+  endGame: (winnerId: string): EndGameAction => ({
+    type: 'endGame',
+    winnerId,
   }),
 };
 

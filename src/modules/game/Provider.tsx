@@ -17,6 +17,8 @@ type GameProps = {
   correctWord: MissionWord | null;
   emittedWord: MissionWord | null;
   bombUserId: string | null;
+  bombState: boolean;
+  gameWinner: Player | null;
 };
 
 const GameContext = createContext<GameProps>({} as GameProps);
@@ -33,6 +35,8 @@ const useProvideGame = () => {
     controller,
     emittedWord,
     bombUserId,
+    bombState,
+    gameWinner,
   } = useGameElements(enteredGame);
 
   return {
@@ -46,6 +50,8 @@ const useProvideGame = () => {
     correctWord,
     emittedWord,
     bombUserId,
+    bombState,
+    gameWinner,
   };
 };
 

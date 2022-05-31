@@ -28,6 +28,11 @@ type StartGameAction = {
   gameId: string;
 };
 
+type EndGameAction = {
+  type: 'endGame';
+  gameId: string;
+};
+
 export type SendAction =
   | EnterAction
   | CallAction
@@ -61,6 +66,10 @@ const actionCreator = {
   }),
   startGame: (gameId: string): StartGameAction => ({
     type: 'startGame',
+    gameId,
+  }),
+  endGame: (gameId: string): EndGameAction => ({
+    type: 'endGame',
     gameId,
   }),
 };
