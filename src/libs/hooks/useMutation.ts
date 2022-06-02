@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useAlert } from 'react-alert';
 
+import cookieClient from '../cookie';
+
 interface UseMutationState<T> {
   loading: boolean;
   data?: T;
@@ -14,13 +16,17 @@ export default function useMutation<T = any>(url: string): UseMutationResult<T> 
   const alert = useAlert();
 
   function mutate(data: any, withCookie?: boolean) {
+    if (withCookie && !cookieClient.get(process.env.REACT_APP_TOKEN_NAME)) {
+      return {};
+    }
     setLoading(true);
     fetch(url, {
       method: 'POST',
       headers: {
+        Authorization: `Bearer ${cookieClient.get(process.env.REACT_APP_TOKEN_NAME)}`,
         'Content-Type': 'application/json',
       },
-      ...(withCookie && { credentials: 'include' }),
+      credentials: 'include',
       body: JSON.stringify(data),
     })
       .then(response => response.json().catch(() => {}))
