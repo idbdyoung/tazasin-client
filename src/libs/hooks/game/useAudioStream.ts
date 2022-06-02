@@ -18,7 +18,8 @@ const useAudioStream = (user?: User) => {
         setMicPermission(true);
         setAudioStream(audioStream);
       })
-      .catch(() => {
+      .catch(e => {
+        console.log(e);
         setMicPermission(false);
         alert('마이크 권한을 활성화 하고 다시 게임에 참여해 주세요');
         navigate('/', { replace: true });
