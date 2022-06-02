@@ -20,10 +20,11 @@ const useGameEnter = () => {
 
   useEffect(() => {
     if (!user || !audioStream || !gameId) return;
-    const socket = new WebSocket(`${process.env.REACT_APP_WEBSOCKET_URL}/${gameId}`, [
-      'access_token',
-      cookieClient.get(process.env.REACT_APP_TOKEN_NAME),
-    ]);
+    const socket = new WebSocket(
+      `${process.env.REACT_APP_WEBSOCKET_URL}/${gameId}?token=${cookieClient.get(
+        process.env.REACT_APP_TOKEN_NAME
+      )}`
+    );
     const session = new Session(socket, audioStream, user);
     setSession(session);
 
