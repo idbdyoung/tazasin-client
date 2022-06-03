@@ -50,6 +50,8 @@ const useGameEnter = () => {
         console.log(error);
       }
     });
+
+    return () => setSession(undefined);
   }, [user, audioStream, gameId]);
 
   useEffect(() => {
