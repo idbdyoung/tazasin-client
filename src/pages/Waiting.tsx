@@ -10,6 +10,7 @@ import Button from '../components/buttons/Default';
 import CreateGame from '../components/game/CreateGame';
 import GameRoom from '../components/game/GameRoom';
 import EnterPrivateGame from '../components/game/EnterPrivateGame';
+import cookieClient from '../libs/cookie';
 
 interface createdGameResultesult {
   ok: boolean;
@@ -35,6 +36,12 @@ const Waiting: React.FC = () => {
     modal.open(<EnterPrivateGame />);
   };
 
+  const logout = () => {
+    cookieClient.remove(process.env.REACT_APP_TOKEN_NAME);
+    alert('로그아웃 되었습니다.');
+    navigate('/');
+  };
+
   useEffect(() => {
     if (!user) {
       navigate('/');
@@ -54,9 +61,10 @@ const Waiting: React.FC = () => {
         <div className="flex flex-col text-sm h-11 text-primary-gray">
           <div className="mr-4">{`대기중인 게임: ${gameList?.length ?? 0}`}</div>
         </div>
-        <div className="flex flex-row">
-          <Button className={'mr-3'} text={'코드로 참여'} onClick={openEnterGamePopup} />
+        <div className="flex flex-row space-x-2">
+          <Button text={'코드로 참여'} onClick={openEnterGamePopup} />
           <Button text={'방만들기'} onClick={openCreateGamePopup} />
+          <Button text={'로그아웃'} onClick={logout} />
         </div>
       </div>
       <div className="flex flex-row w-1/2 min-w-[700px] overflow-y-hidden space-x-3 flex-1 box-border">

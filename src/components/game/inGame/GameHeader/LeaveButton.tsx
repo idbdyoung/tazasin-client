@@ -1,7 +1,7 @@
 import { useGame } from '../../../../modules/game/Provider';
 
 const LeaveButton = () => {
-  const { controller, game } = useGame();
+  const { controller } = useGame();
 
   const handleLeaveGame = () => {
     if (window.confirm('방을 나가시겠습니까?')) {
