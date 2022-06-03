@@ -25,6 +25,7 @@ type GameRoom = {
   gameState: GameState;
   roomName: string;
   isPrivate: boolean;
+  winCondition: number;
   hostId: number;
   colorStore: ColorMap;
   sessions: any[];
@@ -33,6 +34,7 @@ type GameRoom = {
 type GameSetting = {
   roomName: string;
   isPrivate: boolean;
+  winCondition: number;
 };
 
 type GamePhase = 'ready' | 'mission' | 'end';

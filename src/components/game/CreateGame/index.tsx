@@ -5,6 +5,7 @@ import Title from './Title';
 import RoomNameInput from './RoomNameInput';
 import PrivateCheckBox from './PrivateCheckBox';
 import DefaultButton from '../../buttons/Default';
+import WinConditionBox from './WinConditionBox';
 
 interface CreateGameProps {
   createGame: (data: any, withCookie: boolean) => any;
@@ -14,11 +15,13 @@ interface CreateGameProps {
 const CreateGame: React.FC<CreateGameProps> = ({ createGame, loading }) => {
   const [roomName, setRoomName] = useState<string>('타자의 신을 향해~!');
   const [isPrivate, setPrivate] = useState<boolean>(false);
+  const [winCondition, setWinCondition] = useState<number>(10);
 
   const handleCreateGame = () => {
     const createGameData: GameSetting = {
       roomName,
       isPrivate,
+      winCondition,
     };
     createGame({ createGameData }, true);
   };
@@ -29,6 +32,7 @@ const CreateGame: React.FC<CreateGameProps> = ({ createGame, loading }) => {
       <CloseButton />
       <Title />
       <PrivateCheckBox value={isPrivate} updater={setPrivate} />
+      <WinConditionBox value={winCondition} updater={setWinCondition} />
       <RoomNameInput value={roomName} updater={setRoomName} />
       <div className="w-full flex justify-center py-3">
         <DefaultButton text="게임 생성하기" onClick={handleCreateGame} disabled={!roomName} />
