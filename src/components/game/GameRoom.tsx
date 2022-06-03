@@ -12,7 +12,10 @@ const GameRoom = ({ gameRoom }: { gameRoom: GameRoom }) => {
     >
       <div className="flex flex-row justify-between items-center">
         <div className="text-2xl">{gameRoom.roomName}</div>
-        <div className="text-sm">방번호: {gameRoom.gameId}</div>
+        <div>
+          <div className="text-sm">방번호: {gameRoom.gameId}</div>
+          <div>승리 조건: {gameRoom.winCondition}점</div>
+        </div>
       </div>
       <div className="w-full h-full flex flex-row flex-1 mt-3 space-x-11">
         {new Array(4).fill('').map((_, i) => {
