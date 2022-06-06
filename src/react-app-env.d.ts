@@ -5,6 +5,8 @@ declare namespace NodeJS {
     REACT_APP_API_URL: string;
     REACT_APP_TOKEN_NAME: string;
     REACT_APP_WEBSOCKET_URL: string;
+    REACT_APP_TURN_SERVER_USER_NAME: string;
+    REACT_APP_TURN_SERVER_USER_PASSWD: string;
   }
 }
 
