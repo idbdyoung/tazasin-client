@@ -20,8 +20,7 @@ const useGameEnter = () => {
 
   useEffect(() => {
     if (!user || !audioStream || !gameId) return;
-    console.log('소켓 생성!');
-    // if (sessionObj) return;
+    if (sessionObj) return;
     const socket = new WebSocket(
       `${process.env.REACT_APP_WEBSOCKET_URL}/${gameId}?token=${cookieClient.get(
         process.env.REACT_APP_TOKEN_NAME
