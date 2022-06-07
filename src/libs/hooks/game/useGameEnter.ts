@@ -13,20 +13,22 @@ const useGameEnter = () => {
   const [user] = useUser();
   const { gameId } = useParams<{ gameId: string }>();
   const { audioStream } = useAudioStream(user);
-  const [session, setSession] = useState<Session>();
+  const [sessionObj, setSessionObj] = useState<Session>();
   const [enteredGame, setEnteredGame] = useState<Game>();
 
   const handleUpdateGame = (game: Game) => setEnteredGame(game);
 
   useEffect(() => {
     if (!user || !audioStream || !gameId) return;
+    console.log('소켓 생성!');
+    // if (sessionObj) return;
     const socket = new WebSocket(
       `${process.env.REACT_APP_WEBSOCKET_URL}/${gameId}?token=${cookieClient.get(
         process.env.REACT_APP_TOKEN_NAME
       )}`
     );
     const session = new Session(socket, audioStream, user);
-    setSession(session);
+    setSessionObj(session);
 
     socket.addEventListener('open', e => {});
     socket.addEventListener('close', e => {
@@ -53,13 +55,13 @@ const useGameEnter = () => {
       }
     });
 
-    return () => setSession(undefined);
+    return () => setSessionObj(undefined);
   }, [user, audioStream, gameId]);
 
   useEffect(() => {
-    session?.onGameUpdated(handleUpdateGame);
-    return () => session?.removeGameUpdated(handleUpdateGame);
-  }, [session]);
+    sessionObj?.onGameUpdated(handleUpdateGame);
+    return () => sessionObj?.removeGameUpdated(handleUpdateGame);
+  }, [sessionObj]);
 
   return { enteredGame };
 };
