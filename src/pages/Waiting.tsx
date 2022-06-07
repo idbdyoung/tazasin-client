@@ -44,6 +44,7 @@ const Waiting: React.FC = () => {
 
   useEffect(() => {
     if (!user) {
+      console.log('waiting');
       navigate('/');
     }
   }, [user]);

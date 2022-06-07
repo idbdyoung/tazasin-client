@@ -30,6 +30,7 @@ const useGameEnter = () => {
 
     socket.addEventListener('open', e => {});
     socket.addEventListener('close', e => {
+      console.log('socket-close', e);
       if (e.reason) {
         alert(e.reason);
       }
@@ -38,7 +39,7 @@ const useGameEnter = () => {
       navigate('/');
     });
     socket.addEventListener('error', e => {
-      console.log(e);
+      console.log('socket-error', e);
       audioStream.getAudioTracks()[0].stop();
       deleteAudioAll();
       navigate('/');
