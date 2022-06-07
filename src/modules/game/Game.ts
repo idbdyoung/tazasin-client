@@ -48,7 +48,6 @@ class Game {
   }
 
   leaveGame() {
-    console.log('removed');
     this.audioStream.getAudioTracks()[0].stop();
     this.socket.close();
   }

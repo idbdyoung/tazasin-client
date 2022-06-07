@@ -38,6 +38,7 @@ const useGameEnter = () => {
       navigate('/');
     });
     socket.addEventListener('error', e => {
+      console.log(e);
       audioStream.getAudioTracks()[0].stop();
       deleteAudioAll();
       navigate('/');
