@@ -25,6 +25,7 @@ const Signup: React.FC = () => {
   const [user, { mutate }] = useUser();
   const navigate = useNavigate();
   const {
+    watch,
     register,
     handleSubmit,
     setError,
