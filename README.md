@@ -59,6 +59,7 @@ https://tazasin.com
    ![game example](./public/assets/item-4.gif 'game example')
 
 5. bomb(9번키): 플레이보드의 단어에 폭탄을 심을 수 있습니다.
+
    ![game example](./public/assets/item-5.gif 'game example')
    ![game example](./public/assets/item-6.gif 'game example')
 
