@@ -41,6 +41,7 @@ https://tazasin.com
 ### 아이템
 
 > 상대방을 공격하거나 수비할 수 있는 아이템들이 있고 별 표시된 단어를 타이핑해서 얻을 수 있습니다.
+테스트
 
 ![game example](./public/assets/item-8.gif 'game example')
 
